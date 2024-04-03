@@ -1,4 +1,5 @@
 import sys
+import time
 import pygame
 from pygame.locals import *
 from traffic_light_system import TrafficLights, TrafficLightController
@@ -21,6 +22,7 @@ LANE_POINTS = \
         "D": (121, 343)
     }
 lane_colors = {lane: TrafficLights.RED for lane in LANE_POINTS}
+font = pygame.font.SysFont("JetBrains Mono", 30)
 TRAFFIC_LIGHT_RADIUS = 30
 tlc = TrafficLightController()
 
@@ -36,6 +38,14 @@ while True:
             print(pygame.mouse.get_pos())
 
     for index, lane in enumerate(LANE_POINTS):
+        current_lane = tlc.lights.lanes[index]
+        light_color = tlc.lights[current_lane]
+        if light_color == TrafficLights.GREEN:
+            duration_difference = int(time.time() - tlc.lights.last_green_times[current_lane])
+            text = font.render(str(duration_difference), 1, (0, 0, 0))
+            textRect = text.get_rect()
+            textRect.center = (LANE_POINTS[lane][0], LANE_POINTS[lane][1]+45)
+            screen.blit(text, textRect)
         pygame.draw.circle(screen, tlc.lights[tlc.lights.lanes[index]], LANE_POINTS[lane], TRAFFIC_LIGHT_RADIUS)
 
     tlc.run()
