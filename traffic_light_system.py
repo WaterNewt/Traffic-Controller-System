@@ -21,7 +21,7 @@ class TrafficLights:
         self.lights = {lane: self.RED for lane in self.lanes}
         self.last_green_times = {lane: None for lane in self.lanes}
 
-    def __getitem__(self, item) -> str:
+    def __getitem__(self, item):
         for lane in self.lanes:
             if item == lane:
                 return self.lights[lane]
@@ -31,7 +31,6 @@ class TrafficLights:
         if key not in self.lanes:
             raise ValueError("Invalid lane")
         if value == self.GREEN:
-            frame = inspect.currentframe().f_back
             self.lights[key] = value
             self.last_green_times[key] = time.time()
         elif value == self.RED:
